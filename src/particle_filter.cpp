@@ -145,10 +145,11 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
      *   and the following is a good resource for the actual equation to implement
      *   (look at equation 3.33) http://planning.cs.uiuc.edu/node99.html
      */
+
     for (auto &p: particles) {
         std::vector <LandmarkObs> in_range_landmarks;
         in_range_landmarks.reserve(map_landmarks.landmark_list.size());
-        for (auto &landmark_obj: map_landmarks.landmark_list) {
+        for (auto const &landmark_obj: map_landmarks.landmark_list) {
             if (dist(p.x, p.y, landmark_obj.x_f, landmark_obj.y_f) <= sensor_range) {
                 in_range_landmarks.emplace_back(LandmarkObs{landmark_obj.id_i, landmark_obj.x_f, landmark_obj.y_f});
             }
@@ -165,10 +166,25 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 
         dataAssociation(in_range_landmarks, mapped_observations);
 
-        
+        // resetting weight
+        p.weight = 1.0;
+        for (auto const &m_obs : mapped_observations) {
+            auto it = std::find_if(in_range_landmarks.begin(), in_range_landmarks.end(), [&m_obs](LandmarkObs const &obj) {
+                return obj.id == m_obs.id;
+            });
+            if (it != in_range_landmarks.end()) {
+                size_t index = it - in_range_landmarks.begin() + 1;
+                double dX = m_obs.x - in_range_landmarks[index].x;
+                double dY = m_obs.y - in_range_landmarks[index].y;
+                double weight = ( 1/(2*M_PI*std_landmark[0]*std_landmark[1])) *
+                        exp( -( dX*dX/(2*std_landmark[0]*std_landmark[0]) +
+                        (dY*dY/(2*std_landmark[1]*std_landmark[1])) ) );
+                p.weight *= weight;
+            } else {
+                std::runtime_error("ERROR");
+            }
+        }
     }
-
-
 }
 
 void ParticleFilter::resample() {
