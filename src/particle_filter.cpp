@@ -20,6 +20,7 @@
 
 using std::string;
 using std::vector;
+std::default_random_engine gen;
 
 void ParticleFilter::init(double x, double y, double theta, double std[]) {
     /**
@@ -30,7 +31,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
      * NOTE: Consult particle_filter.h for more information about this method
      *   (and others in this file).
      */
-    std::default_random_engine gen;
+
     num_particles = 100;  // TODO: Set the number of particles
 
     // standard deviations
@@ -44,7 +45,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
     std::normal_distribution<double> dist_theta(theta, std_theta);
 
     // generate particles with mean on GPS values
-    for (size_t i = 0; i < (size_t)num_particles; i++) {
+    for (size_t i = 0; i < (size_t) num_particles; i++) {
 
         Particle particle;
         particle.id = i;
@@ -69,6 +70,35 @@ void ParticleFilter::prediction(double delta_t, double std_pos[],
      *  http://www.cplusplus.com/reference/random/default_random_engine/
      */
 
+    // standard deviations
+    double std_x = std_pos[0];
+    double std_y = std_pos[1];
+    double std_theta = std_pos[2];
+
+    // normal distributions
+    std::normal_distribution<double> dist_x(0, std_x);
+    std::normal_distribution<double> dist_y(0, std_y);
+    std::normal_distribution<double> dist_theta(0, std_theta);
+
+    // calculate new state
+    for (size_t i = 0; i < (size_t) num_particles; i++) {
+
+        double theta = particles[i].theta;
+
+        if (fabs(yaw_rate) < 0.0000001) { // yaw not changing
+            particles[i].x += velocity * delta_t * cos(theta);
+            particles[i].y += velocity * delta_t * sin(theta);
+        } else {
+            particles[i].x += velocity / yaw_rate * (sin(theta + yaw_rate * delta_t) - sin(theta));
+            particles[i].y += velocity / yaw_rate * (cos(theta) - cos(theta + yaw_rate * delta_t));
+            particles[i].theta += yaw_rate * delta_t;
+        }
+
+        // add noise
+        particles[i].x += dist_x(gen);
+        particles[i].y += dist_y(gen);
+        particles[i].theta += dist_theta(gen);
+    }
 }
 
 void ParticleFilter::dataAssociation(vector <LandmarkObs> predicted,
@@ -82,6 +112,21 @@ void ParticleFilter::dataAssociation(vector <LandmarkObs> predicted,
      *   during the updateWeights phase.
      */
 
+    if (predicted.empty()) {
+        std::runtime_error("no predictions!");
+    }
+
+    for (auto &observation : observations) {
+        double min_dist = dist(predicted.front().x, predicted.front().y, observation.x, observation.y);
+        observation.id = predicted.front().id;
+        for (size_t i = 1; i < predicted.size(); i++) {
+            double cur_dist = dist(predicted[i].x, predicted[i].y, observation.x, observation.y);
+            if (cur_dist < min_dist) {
+                min_dist = cur_dist;
+                observation.id = predicted[i].id;
+            }
+        }
+    }
 }
 
 void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
@@ -100,6 +145,29 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
      *   and the following is a good resource for the actual equation to implement
      *   (look at equation 3.33) http://planning.cs.uiuc.edu/node99.html
      */
+    for (auto &p: particles) {
+        std::vector <LandmarkObs> in_range_landmarks;
+        in_range_landmarks.reserve(map_landmarks.landmark_list.size());
+        for (auto &landmark_obj: map_landmarks.landmark_list) {
+            if (dist(p.x, p.y, landmark_obj.x_f, landmark_obj.y_f) <= sensor_range) {
+                in_range_landmarks.emplace_back(LandmarkObs{landmark_obj.id_i, landmark_obj.x_f, landmark_obj.y_f});
+            }
+        }
+        in_range_landmarks.shrink_to_fit();
+
+        std::vector <LandmarkObs> mapped_observations;
+        mapped_observations.reserve(observations.size());
+        for (auto const &observation : observations) {
+            double x_mapped = cos(p.theta) * observation.x - sin(p.theta) * observation.y + p.x;
+            double y_mapped = sin(p.theta) * observation.x + cos(p.theta) * observation.y + p.y;
+            mapped_observations.emplace_back(LandmarkObs{observation.id, x_mapped, y_mapped});
+        }
+
+        dataAssociation(in_range_landmarks, mapped_observations);
+
+        
+    }
+
 
 }
 

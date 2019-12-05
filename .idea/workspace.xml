@@ -26,6 +26,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.editor" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -50,7 +51,7 @@
       <option name="presentableId" value="Default" />
       <updated>1574884683935</updated>
       <workItem from="1574884685229" duration="410000" />
-      <workItem from="1575492115364" duration="1469000" />
+      <workItem from="1575492115364" duration="8954000" />
     </task>
     <servers />
   </component>
