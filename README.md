@@ -12,7 +12,7 @@
 * [License](#license)
 * [Contact](#contact)
 
-<img src="data/project-pic.PNG" alt="Project Image" />
+<img src="imgs/project-pic.PNG" alt="Project Image" />
 
 ## About the Project
 ---
@@ -111,7 +111,10 @@ root
 |___data
 |   |   
 |   |   map_data.txt
-|   
+|
+|___imgs
+|   |   
+|   |   project_pic.png 
 |   
 |___src
     |   helper_functions.h
