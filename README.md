@@ -11,6 +11,7 @@
 * [License](#license)
 * [Contact](#contact)
 
+<img src="data/project-pic.PNG" alt="Project Image" />
 
 ## About the Project
 ---
@@ -94,6 +95,7 @@ OUTPUT: values provided by the c++ program to the simulator
 
 ["best_particle_sense_y"] <= list of sensed y positions
 
+<!-- STRUCTURE -->
 ## Structure
 The directory structure of this repository is as follows:
 
@@ -118,6 +120,7 @@ root
     |   particle_filter.h
 ```
 
+<!-- INPUTS TO THE PARTICLE FILTER -->
 ## Inputs to the Particle Filter
 You can find the inputs to the particle filter in the `data` directory.
 
