@@ -51,7 +51,7 @@
       <option name="presentableId" value="Default" />
       <updated>1574884683935</updated>
       <workItem from="1574884685229" duration="410000" />
-      <workItem from="1575492115364" duration="11201000" />
+      <workItem from="1575492115364" duration="22368000" />
     </task>
     <servers />
   </component>
@@ -70,5 +70,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/particle_filter.h</url>
+          <line>68</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
