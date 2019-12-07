@@ -131,7 +131,6 @@ void ParticleFilter::dataAssociation(vector <LandmarkObs> predicted,
                 observation.id = predicted[i].id;
             }
         }
-        //std::cout << "id: " << observation.id << " " << observation.x << " " << observation.y << std::endl;
     }
 }
 
@@ -209,27 +208,11 @@ void ParticleFilter::resample() {
      *   http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
      */
 
-    double maxWeight = *max_element(std::begin(weights), std::end(weights));
+    std::discrete_distribution<> dist(weights.begin(), weights.end());
 
-    // Creating distributions.
-    std::uniform_real_distribution<double> distDouble(0.0, maxWeight);
-    std::uniform_int_distribution<int> distInt(0, num_particles - 1);
-
-    // Generating index.
-    int index = distInt(gen);
-
-    double beta = 0.0;
-
-    // the wheel
-    std::vector<Particle> resampled_particles;
-    resampled_particles.reserve(particles.size());
+    std::vector <Particle> resampled_particles(particles.size());
     for (int i = 0; i < num_particles; i++) {
-        beta += distDouble(gen) * 2.0;
-        while (beta > weights[index]) {
-            beta -= weights[index];
-            index = (index + 1) % num_particles;
-        }
-        resampled_particles.emplace_back(particles[index]);
+        resampled_particles[i] = particles[dist(gen)];
     }
 
     particles = std::move(resampled_particles);
