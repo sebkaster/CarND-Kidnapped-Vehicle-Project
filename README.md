@@ -1,10 +1,28 @@
 # Kidnapped Vehicle
 
-Your robot has been kidnapped and transported to a new location! Luckily it has a map of this location, a (noisy) GPS estimate of its initial location, and lots of (noisy) sensor and control data.
+<!-- TABLE OF CONTENTS -->
+## Table of Contents
+
+* [About the Project](#about-the-project)
+* [Getting Started](#getting-started)
+* [Structure](#structure)
+* [Inputs to the Particle Filter](#inputs-to-the-particle-filter)
+* [Contributing](#contributing)
+* [License](#license)
+* [Contact](#contact)
+
+
+## About the Project
+---
+
+A robot has been kidnapped and transported to a new location! Luckily it has a map of this location, a (noisy) GPS estimate of its initial location, and lots of (noisy) sensor and control data.
 
 This project implements a 2 dimensional particle filter in C++. Your particle filter will be given a map and some initial localization information (analogous to what a GPS would provide). At each time step the filter will also get observation and control data.
 
-## Running the Code
+<!-- GETTING STARTED -->
+## Getting Started
+
+The software is written in C++ and tested on Linux. 
 This project involves the Term 2 Simulator which can be downloaded [here](https://github.com/udacity/self-driving-car-sim/releases)
 
 This repository includes two files that can be used to set up and install uWebSocketIO for either Linux or Mac systems. For windows you can use either Docker, VMware, or even Windows 10 Bash on Ubuntu to install uWebSocketIO.
@@ -76,14 +94,7 @@ OUTPUT: values provided by the c++ program to the simulator
 
 ["best_particle_sense_y"] <= list of sensed y positions
 
-
-Your job is to build out the methods in `particle_filter.cpp` until the simulator output says:
-
-```
-Success! Your particle filter passed!
-```
-
-# Structure
+## Structure
 The directory structure of this repository is as follows:
 
 ```
@@ -119,3 +130,26 @@ You can find the inputs to the particle filter in the `data` directory.
 ### All other data the simulator provides, such as observations and controls.
 
 > * Map data provided by 3D Mapping Solutions GmbH.
+>
+<!-- CONTRIBUTING -->
+## Contributing
+
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+<!-- LICENSE -->
+## License
+
+Distributed under the MIT License.
+
+<!-- CONTACT -->
+## Contact
+
+Sebastian Kaster - sebastiankaster@googlemail.com
+
+Project Link: [https://github.com/sebkaster/CarND-Kidnapped-Vehicle-Project](https://github.com/sebkaster/CarND-Kidnapped-Vehicle-Project)
